@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Masthead } from "@/components/masthead";
+import { BreakingBand } from "@/components/breaking-band";
+import { IndexBar } from "@/components/index-bar";
 import { ArticleCard } from "@/components/article-card";
 import { SiteFooter } from "@/components/site-footer";
 import { todayKST } from "@/lib/articles";
@@ -20,6 +22,8 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       <Masthead date={today} issueNo={issueNo} />
+      <BreakingBand articles={published} />
+      <IndexBar issueNo={issueNo} count={published.length} />
 
       <main className="mx-auto max-w-6xl px-4">
         {!lead ? (
@@ -32,7 +36,7 @@ export default async function HomePage() {
           <>
             {/* 1면 톱기사 */}
             <section className="grid gap-8 border-b border-rule/40 py-8 md:grid-cols-3">
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 md:pr-8">
                 <div className="mb-3 flex items-center gap-2 text-[11px] text-accent smallcaps">
                   <span>{lead.kicker}</span>
                   <span className="text-muted">·</span>
@@ -40,18 +44,18 @@ export default async function HomePage() {
                   <span className="text-muted">· 오늘의 톱기사</span>
                 </div>
                 <Link href={`/article/${lead.slug}`}>
-                  <h2 className="font-display text-4xl font-black leading-[1.08] text-ink transition-colors hover:text-accent sm:text-6xl">
+                  <h2 className="headline-lead text-ink transition-colors hover:text-accent">
                     {lead.headline}
                   </h2>
                 </Link>
                 <p className="mt-4 font-display text-xl italic leading-snug text-muted sm:text-2xl">
                   {lead.deck}
                 </p>
-                <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-ink/85">
+                <p className="article-body dropcap mt-5 max-w-2xl text-[17px] leading-relaxed text-ink/90">
                   {lead.body[0]}
                 </p>
                 <div className="mt-4 flex items-center gap-3 text-[12px] text-muted smallcaps">
-                  <span>{lead.byline}</span>
+                  <span className="text-ink">{lead.byline}</span>
                   <span>·</span>
                   <span>{lead.dateline}발</span>
                   <span>·</span>
@@ -67,10 +71,13 @@ export default async function HomePage() {
 
               {/* 사이드 두 꼭지 */}
               <aside className="col-rule flex flex-col gap-6 pl-0 md:pl-6">
+                <div className="smallcaps text-[10px] text-muted">
+                  이 시각 편집국
+                </div>
                 {secondary.map((a) => (
                   <div
                     key={a.slug}
-                    className="border-b border-rule/30 pb-5 last:border-0"
+                    className="top-hair border-rule/40 pt-4"
                   >
                     <ArticleCard article={a} variant="compact" />
                   </div>
@@ -86,14 +93,20 @@ export default async function HomePage() {
             {/* 하단 다단 편집 */}
             {columns.length > 0 && (
               <section className="py-8">
-                <h3 className="rule-double mb-6 pt-3 text-center font-display text-sm italic text-muted">
-                  더 많은 오늘의 소식
-                </h3>
+                <div className="mb-6 flex items-center gap-4">
+                  <span className="h-px flex-1 bg-rule/40" />
+                  <h3 className="font-display text-sm italic text-muted">
+                    더 많은 오늘의 소식
+                  </h3>
+                  <span className="h-px flex-1 bg-rule/40" />
+                </div>
                 <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
                   {columns.map((a, i) => (
                     <div
                       key={a.slug}
-                      className={i % 3 !== 0 ? "lg:col-rule lg:pl-6" : ""}
+                      className={`top-rule pt-3 ${
+                        i % 3 !== 0 ? "lg:col-rule lg:pl-6" : ""
+                      }`}
                     >
                       <ArticleCard article={a} />
                     </div>
