@@ -16,9 +16,9 @@ export const BreakingBand = ({ articles }: BreakingBandProps) => {
         <Link
           key={a.slug}
           href={`/article/${a.slug}`}
-          className="mx-6 text-[13px] text-paper/95 hover:text-paper hover:underline"
+          className="mx-6 text-[13px] text-current opacity-90 hover:underline hover:opacity-100"
         >
-          <span className="mr-2 text-paper/60">◆</span>
+          <span className="mr-2 opacity-50">◆</span>
           {a.headline}
         </Link>
       ))}
@@ -26,7 +26,7 @@ export const BreakingBand = ({ articles }: BreakingBandProps) => {
   );
 
   return (
-    <div className="flex items-stretch border-b-2 border-rule bg-ink text-paper">
+    <div className="band flex items-stretch border-b-2 border-rule">
       <div className="breaking-tag flex shrink-0 items-center px-3 smallcaps text-[12px] font-bold tracking-widest">
         속보
       </div>

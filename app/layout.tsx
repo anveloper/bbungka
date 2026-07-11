@@ -35,8 +35,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${playfair.variable} ${ptSerif.variable}`}>
-      <body className="min-h-screen antialiased">{children}</body>
+    <html
+      lang="ko"
+      className={`${playfair.variable} ${ptSerif.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen antialiased">
+        {/* 페인트 전에 테마 적용 → 다크/라이트 깜빡임(FOUC) 방지 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.dataset.theme=d?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}})();`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

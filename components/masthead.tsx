@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SECTIONS, formatKoreanDate } from "@/lib/articles";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type MastheadProps = {
   date: string; // YYYY-MM-DD
@@ -10,10 +11,13 @@ export const Masthead = ({ date, issueNo }: MastheadProps) => {
   return (
     <header className="border-b-2 border-rule">
       {/* 상단 얇은 정보줄 */}
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-1.5 text-[11px] tracking-wide text-muted smallcaps">
-        <span>제 {issueNo.toLocaleString()} 호 · 조간</span>
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5 text-[11px] tracking-wide text-muted smallcaps">
+        <span className="shrink-0">제 {issueNo.toLocaleString()} 호</span>
         <span className="hidden sm:block">대한민국 · 전 세계 동시 배달</span>
-        <span>정가 0원 (읽는 값어치도 그 정도)</span>
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="hidden sm:inline">정가 0원</span>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="border-t border-rule/40" />
