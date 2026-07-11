@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f5f1e8;
+  --paper-2: #efe9dc;
+  --ink: #1a1712;
+  --muted: #6f665a;
+  --rule: #1a1712;
+  --accent: #7a1f1f;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --font-display: var(--font-playfair);
+  --font-serif: var(--font-serif);
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Newspaper grain / aged paper feel */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background-image: radial-gradient(
+    rgba(26, 23, 18, 0.035) 1px,
+    transparent 1px
+  );
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+}
+
+/* Small-caps label used for kickers / sections */
+.smallcaps {
+  font-family: var(--font-serif), Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+}
+
+/* Drop cap for article bodies */
+.dropcap::first-letter {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 900;
+  float: left;
+  font-size: 4.6rem;
+  line-height: 0.78;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--ink);
+}
+
+.article-body p {
+  margin-bottom: 1.05rem;
+  text-align: justify;
+  hyphens: auto;
+  line-height: 1.72;
+}
+
+/* Column rules for the front-page grid */
+.col-rule {
+  position: relative;
+}
+.col-rule::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+  opacity: 0.28;
+}
+
+/* Thin double rule */
+.rule-double {
+  border-top: 3px double var(--rule);
+}
+
+.link-underline {
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.25s ease;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
