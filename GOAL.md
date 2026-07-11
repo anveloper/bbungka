@@ -63,8 +63,10 @@ lib/
 - [x] "하루 하나" 날짜 게이팅 로직 + 미래 기사 숨김
 - [x] `pnpm build` 성공, 콘솔 에러 없음
 - [x] 풍자/허구 고지 명시
-- [ ] GitHub 레포 생성 (`gh`)
-- [ ] Vercel 프로덕션 배포
+- [x] GitHub 레포 생성 (`gh`)
+- [x] Vercel 프로덕션 배포
+- [x] Gemini 기반 AI 기사 자동 생성 + Neon(Postgres) 저장
+- [x] GitHub Actions 15분 주기 자동 생성 (데모) + Vercel 일일 Cron(운영)
 
 ## 앞으로 기사 추가하는 법
 
@@ -86,3 +88,30 @@ lib/
 ```
 
 > (선택) 완전 자동화를 원하면, GitHub Actions나 Vercel Cron으로 매일 AI가 기사 1건을 생성해 커밋하도록 확장할 수 있습니다.
+
+## 🤖 AI 자동 생성 파이프라인 (구현 완료)
+
+```
+스케줄러 → POST /api/cron/generate → Gemini(generateText+Output.object)
+  → Neon(articles 테이블) INSERT → revalidatePath('/') → 지면 즉시 반영
+```
+
+- **모델**: `@ai-sdk/google`로 Gemini 직결(`gemini-flash-latest`, `GEMINI_MODEL`로 변경 가능). 키는 `GEMINI_AI_API_KEY`.
+- **저장소**: Vercel **Neon(Postgres)**. `lib/db.ts`가 스키마 자동 생성(`ensureSchema`)·조회·삽입 담당. DB 장애 시 정적 기사로 graceful 폴백.
+- **병합/정렬**: `lib/get-articles.ts`가 정적 seed + AI 기사를 합쳐 "발행일 ≤ 오늘 + 최신순"으로 노출. 갓 생성된 AI 기사가 당일 톱기사.
+- **보안**: `/api/cron/generate`는 `Authorization: Bearer $CRON_SECRET` 필수(미인증 401).
+- **스케줄**:
+  - 데모용 15분 주기 → `.github/workflows/generate.yml` (`*/15 * * * *`).
+  - 운영 일일 1회 → `vercel.json` crons (`0 15 * * *` = 00:00 KST). Hobby 플랜은 Cron이 하루 1회로 제한되므로 잦은 주기는 GitHub Actions로 처리.
+
+### 필요한 환경변수 (`.env.example` 참고)
+
+| 변수 | 용도 | 설정 위치 |
+| --- | --- | --- |
+| `GEMINI_AI_API_KEY` | Gemini API 키 | Vercel(3환경) + 로컬 |
+| `DATABASE_URL` | Neon 연결 | Vercel Neon 통합이 자동 주입 |
+| `CRON_SECRET` | cron 엔드포인트 보호 | Vercel + GitHub Actions secret + 로컬 |
+| `GEMINI_MODEL` | (선택) 모델 오버라이드 | 미설정 시 `gemini-flash-latest` |
+
+### 스케줄 주기 바꾸기
+`.github/workflows/generate.yml`의 `cron` 값을 수정(예: 운영 시 `0 15 * * *`)하거나 워크플로를 끄고 `vercel.json`의 일일 Cron만 사용하면 됩니다.
