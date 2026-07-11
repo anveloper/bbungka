@@ -103,3 +103,83 @@ body::before {
 .link-underline:hover {
   background-size: 100% 1px;
 }
+
+/* 반응형 디스플레이 타이포 */
+.masthead-title {
+  font-size: clamp(2.4rem, 8.5vw, 5.5rem);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+.headline-lead {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 900;
+  line-height: 1.03;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.1rem, 5.6vw, 4.3rem);
+}
+.headline-article {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+}
+
+/* 오늘의 지수 (증시란 패러디) */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+.idx-up {
+  color: var(--accent);
+}
+.idx-down {
+  color: #2f6b3a;
+}
+
+/* 속보 티커 */
+.breaking-tag {
+  background: var(--accent);
+  color: var(--paper);
+}
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker-track {
+  display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ticker 40s linear infinite;
+}
+.ticker-mask:hover .ticker-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* 풀쿼트 */
+.pull-quote {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(1.35rem, 3.4vw, 1.9rem);
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+}
+
+/* 브로드시트 상단 굵은 괘선 */
+.top-rule {
+  border-top: 2px solid var(--rule);
+}
+.top-hair {
+  border-top: 1px solid var(--rule);
+}

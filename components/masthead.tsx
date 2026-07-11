@@ -27,7 +27,7 @@ export const Masthead = ({ date, issueNo }: MastheadProps) => {
         </div>
 
         <Link href="/" className="block">
-          <h1 className="font-display text-5xl font-black leading-none tracking-tight text-ink sm:text-7xl">
+          <h1 className="masthead-title font-display font-black text-ink">
             The Bbungka Times
           </h1>
         </Link>
@@ -44,7 +44,7 @@ export const Masthead = ({ date, issueNo }: MastheadProps) => {
           <span className="italic normal-case tracking-normal text-muted">
             &ldquo;All The News That&rsquo;s Unfit To Believe&rdquo;
           </span>
-          <span>오늘의 진실 함유량: 0%</span>
+          <span>날씨 · 거짓말처럼 맑음</span>
         </div>
       </div>
 
@@ -52,7 +52,10 @@ export const Masthead = ({ date, issueNo }: MastheadProps) => {
       <nav className="border-t border-rule">
         <ul className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-5 gap-y-1 px-4 py-2 text-[12px] smallcaps">
           <li>
-            <Link href="/" className="link-underline text-ink">
+            <Link
+              href="/"
+              className="border-b-2 border-accent pb-0.5 font-bold text-accent"
+            >
               1면
             </Link>
           </li>
