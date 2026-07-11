@@ -18,7 +18,13 @@ export type Article = {
   publishDate: string; // YYYY-MM-DD (KST 기준 이 날짜부터 지면에 실림)
   readMinutes: number;
   body: string[]; // 문단 배열
+  createdAt?: string; // ISO 타임스탬프 (AI 생성 기사 정렬 tie-break용)
 };
+
+/** 정렬 키: AI 생성 기사는 생성 시각, 정적 기사는 발행일 정오 기준 */
+export function articleSortKey(a: Article): string {
+  return a.createdAt ?? `${a.publishDate}T12:00:00.000Z`;
+}
 
 export const SECTIONS: Section[] = [
   "정치",
@@ -47,27 +53,6 @@ export function formatKoreanDate(iso: string): string {
   const date = new Date(Date.UTC(y, m - 1, d));
   const weekday = ["일", "월", "화", "수", "목", "금", "토"][date.getUTCDay()];
   return `${y}년 ${m}월 ${d}일 ${weekday}요일`;
-}
-
-/** 발행일(오늘 이하)인 기사만, 최신순으로 반환 */
-export function getPublishedArticles(today = todayKST()): Article[] {
-  return ARTICLES.filter((a) => a.publishDate <= today).sort((a, b) =>
-    a.publishDate < b.publishDate ? 1 : -1,
-  );
-}
-
-export function getArticleBySlug(
-  slug: string,
-  today = todayKST(),
-): Article | undefined {
-  const article = ARTICLES.find((a) => a.slug === slug);
-  if (!article || article.publishDate > today) return undefined;
-  return article;
-}
-
-/** 오늘의 1면 톱기사 */
-export function getLeadArticle(today = todayKST()): Article | undefined {
-  return getPublishedArticles(today)[0];
 }
 
 /**
