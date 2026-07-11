@@ -21,9 +21,12 @@ export type Article = {
   createdAt?: string; // ISO 타임스탬프 (AI 생성 기사 정렬 tie-break용)
 };
 
-/** 정렬 키: AI 생성 기사는 생성 시각, 정적 기사는 발행일 정오 기준 */
+/**
+ * 정렬 키: AI 생성 기사는 실제 생성 시각(createdAt),
+ * 정적 seed 기사는 발행일 자정 기준 → 같은 날 갓 생성된 AI 기사가 항상 위(속보).
+ */
 export function articleSortKey(a: Article): string {
-  return a.createdAt ?? `${a.publishDate}T12:00:00.000Z`;
+  return a.createdAt ?? `${a.publishDate}T00:00:00.000Z`;
 }
 
 export const SECTIONS: Section[] = [
