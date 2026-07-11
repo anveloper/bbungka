@@ -70,18 +70,17 @@ export default async function HomePage() {
               </div>
 
               {/* 사이드 두 꼭지 */}
-              <aside className="col-rule flex flex-col gap-6 pl-0 md:pl-6">
-                <div className="smallcaps text-[10px] text-muted">
+              <aside className="col-rule flex flex-col pl-0 md:pl-6">
+                <div className="smallcaps mb-5 text-[10px] text-muted">
                   이 시각 편집국
                 </div>
-                {secondary.map((a) => (
-                  <div
-                    key={a.slug}
-                    className="top-hair border-rule/40 pt-4"
-                  >
-                    <ArticleCard article={a} variant="compact" />
-                  </div>
-                ))}
+                <div className="flex flex-col divide-y divide-rule/40">
+                  {secondary.map((a) => (
+                    <div key={a.slug} className="pb-5 pt-5 first:pt-0">
+                      <ArticleCard article={a} variant="compact" />
+                    </div>
+                  ))}
+                </div>
                 {secondary.length === 0 && (
                   <p className="text-sm italic text-muted">
                     곧 더 많은 거짓말이 도착합니다.
