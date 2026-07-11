@@ -13,6 +13,15 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// 본문에서 인용부호로 묶인 문구를 찾아 풀쿼트로 사용
+function extractQuote(body: string[]): string | null {
+  for (const p of body) {
+    const m = p.match(/[“"]([^”"]{8,90})[”"]/);
+    if (m) return m[1];
+  }
+  return null;
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -40,6 +49,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const issueNo = 41000 + published.length;
   const related = published.filter((a) => a.slug !== article.slug).slice(0, 3);
+  const quote = extractQuote(article.body);
 
   return (
     <div className="min-h-screen">
@@ -53,7 +63,7 @@ export default async function ArticlePage({ params }: PageProps) {
             <span className="text-muted">{article.section}</span>
           </div>
 
-          <h1 className="font-display text-4xl font-black leading-[1.1] text-ink sm:text-5xl">
+          <h1 className="headline-article font-display text-ink">
             {article.headline}
           </h1>
 
@@ -73,9 +83,14 @@ export default async function ArticlePage({ params }: PageProps) {
 
           <div className="article-body mt-8 text-[17px] text-ink">
             {article.body.map((p, i) => (
-              <p key={i} className={i === 0 ? "dropcap" : undefined}>
-                {p}
-              </p>
+              <div key={i}>
+                <p className={i === 0 ? "dropcap" : undefined}>{p}</p>
+                {quote && i === 0 && (
+                  <blockquote className="pull-quote my-7 border-l-2 border-accent pl-5 text-ink">
+                    &ldquo;{quote}&rdquo;
+                  </blockquote>
+                )}
+              </div>
             ))}
           </div>
 
