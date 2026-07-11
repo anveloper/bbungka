@@ -4,12 +4,8 @@ import type { Metadata } from "next";
 import { Masthead } from "@/components/masthead";
 import { ArticleCard } from "@/components/article-card";
 import { SiteFooter } from "@/components/site-footer";
-import {
-  getArticleBySlug,
-  getPublishedArticles,
-  todayKST,
-  formatKoreanDate,
-} from "@/lib/articles";
+import { todayKST, formatKoreanDate } from "@/lib/articles";
+import { getAllPublished, getPublishedBySlug } from "@/lib/get-articles";
 
 export const revalidate = 3600;
 
@@ -21,7 +17,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getPublishedBySlug(slug);
   if (!article) return { title: "기사를 찾을 수 없습니다 — The Bbungka Times" };
   return {
     title: `${article.headline} — The Bbungka Times`,
@@ -37,14 +33,13 @@ export async function generateMetadata({
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const today = todayKST();
-  const article = getArticleBySlug(slug, today);
+  const published = await getAllPublished(today);
+  const article = published.find((a) => a.slug === slug);
 
   if (!article) notFound();
 
-  const issueNo = 41000 + getPublishedArticles(today).length;
-  const related = getPublishedArticles(today)
-    .filter((a) => a.slug !== article.slug)
-    .slice(0, 3);
+  const issueNo = 41000 + published.length;
+  const related = published.filter((a) => a.slug !== article.slug).slice(0, 3);
 
   return (
     <div className="min-h-screen">

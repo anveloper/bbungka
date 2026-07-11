@@ -2,14 +2,15 @@ import Link from "next/link";
 import { Masthead } from "@/components/masthead";
 import { ArticleCard } from "@/components/article-card";
 import { SiteFooter } from "@/components/site-footer";
-import { getPublishedArticles, todayKST } from "@/lib/articles";
+import { todayKST } from "@/lib/articles";
+import { getAllPublished } from "@/lib/get-articles";
 
-// 매 시간 재검증 → 자정이 지나면 그날의 새 기사가 지면에 등장
-export const revalidate = 3600;
+// 60초마다 재검증 → 새로 생성된 AI 기사가 곧바로 지면에 반영
+export const revalidate = 60;
 
-export default function HomePage() {
+export default async function HomePage() {
   const today = todayKST();
-  const published = getPublishedArticles(today);
+  const published = await getAllPublished(today);
   const issueNo = 41000 + published.length;
 
   const [lead, ...rest] = published;
