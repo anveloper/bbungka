@@ -19,13 +19,21 @@ const ptSerif = PT_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "The Bbungka Times — 뻥카뉴스",
+  metadataBase: new URL("https://bbungka.vercel.app"),
+  title: {
+    default: "The Bbungka Times — 뻥카뉴스",
+    template: "%s — The Bbungka Times",
+  },
   description:
     "매일 하나씩, 세상에서 가장 그럴듯한 거짓말. 100% 허구로 지어낸 풍자 신문.",
+  keywords: ["뻥카뉴스", "가짜뉴스", "풍자", "패러디 신문", "The Bbungka Times"],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "The Bbungka Times — 뻥카뉴스",
     description: "매일 하나씩, 세상에서 가장 그럴듯한 거짓말.",
     type: "website",
+    locale: "ko_KR",
+    siteName: "The Bbungka Times",
   },
 };
 

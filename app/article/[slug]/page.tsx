@@ -27,14 +27,17 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getPublishedBySlug(slug);
-  if (!article) return { title: "기사를 찾을 수 없습니다 — The Bbungka Times" };
+  if (!article)
+    return { title: { absolute: "기사를 찾을 수 없습니다 — The Bbungka Times" } };
   return {
-    title: `${article.headline} — The Bbungka Times`,
+    title: article.headline,
     description: article.deck,
+    alternates: { canonical: `/article/${article.slug}` },
     openGraph: {
       title: article.headline,
       description: article.deck,
       type: "article",
+      publishedTime: article.createdAt ?? `${article.publishDate}T00:00:00.000Z`,
     },
   };
 }
