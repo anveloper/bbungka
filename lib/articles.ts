@@ -39,6 +39,29 @@ export const SECTIONS: Section[] = [
   "스포츠",
 ];
 
+// 섹션 ↔ URL 슬러그 매핑 (SEO 친화적 영문 슬러그)
+export const SECTION_SLUGS: Record<Section, string> = {
+  정치: "politics",
+  국제: "world",
+  사회: "society",
+  경제: "business",
+  과학: "science",
+  문화: "culture",
+  스포츠: "sports",
+};
+
+const SLUG_TO_SECTION: Record<string, Section> = Object.fromEntries(
+  Object.entries(SECTION_SLUGS).map(([sec, slug]) => [slug, sec as Section]),
+) as Record<string, Section>;
+
+export function sectionToSlug(section: Section): string {
+  return SECTION_SLUGS[section];
+}
+
+export function slugToSection(slug: string): Section | undefined {
+  return SLUG_TO_SECTION[slug];
+}
+
 /**
  * 오늘 날짜(KST)를 YYYY-MM-DD 문자열로 반환한다.
  * 이 값보다 publishDate가 늦은 기사는 아직 "인쇄되지 않은" 것으로 간주해 숨긴다.

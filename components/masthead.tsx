@@ -1,13 +1,19 @@
 import Link from "next/link";
-import { SECTIONS, formatKoreanDate } from "@/lib/articles";
+import {
+  SECTIONS,
+  formatKoreanDate,
+  sectionToSlug,
+  type Section,
+} from "@/lib/articles";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 type MastheadProps = {
   date: string; // YYYY-MM-DD
   issueNo: number;
+  activeSection?: Section; // 현재 섹션 페이지면 해당 탭 강조
 };
 
-export const Masthead = ({ date, issueNo }: MastheadProps) => {
+export const Masthead = ({ date, issueNo, activeSection }: MastheadProps) => {
   return (
     <header className="border-b-2 border-rule">
       {/* 상단 얇은 정보줄 */}
@@ -58,16 +64,27 @@ export const Masthead = ({ date, issueNo }: MastheadProps) => {
           <li>
             <Link
               href="/"
-              className="border-b-2 border-accent pb-0.5 font-bold text-accent"
+              className={
+                activeSection
+                  ? "link-underline text-ink"
+                  : "border-b-2 border-accent pb-0.5 font-bold text-accent"
+              }
             >
               1면
             </Link>
           </li>
           {SECTIONS.map((s) => (
             <li key={s}>
-              <span className="link-underline cursor-default text-muted">
+              <Link
+                href={`/section/${sectionToSlug(s)}`}
+                className={
+                  activeSection === s
+                    ? "border-b-2 border-accent pb-0.5 font-bold text-accent"
+                    : "link-underline text-muted hover:text-ink"
+                }
+              >
                 {s}
-              </span>
+              </Link>
             </li>
           ))}
         </ul>
