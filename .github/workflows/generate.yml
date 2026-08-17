@@ -1,10 +1,8 @@
 name: 뻥카뉴스 기사 생성
 
-# 오늘은 데모용으로 15분마다 생성. (GitHub Actions cron은 최소 5분 단위, 부하 시 지연 가능)
-# 운영 전환 시 이 스케줄을 '0 15 * * *'(매일 00:00 KST) 등으로 바꾸면 된다.
+# 정기 생성은 Vercel Cron(vercel.json, 매일 00:00 KST)이 담당한다.
+# 이 워크플로는 필요할 때 기사를 한 편 더 뽑는 수동 트리거 전용.
 on:
-  schedule:
-    - cron: "*/15 * * * *"
   workflow_dispatch: {} # 수동 실행 버튼
 
 jobs:
