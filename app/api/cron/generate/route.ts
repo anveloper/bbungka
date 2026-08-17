@@ -95,7 +95,9 @@ async function handle(req: Request) {
 
     const google = createGoogle({ apiKey });
     const now = new Date();
-    const hint = TOPIC_HINTS[now.getMinutes() % TOPIC_HINTS.length];
+    // 하루 1회 생성이므로 '일' 단위로 힌트를 회전시킨다 (12일 주기)
+    const dayIndex = Math.floor(now.getTime() / 86_400_000);
+    const hint = TOPIC_HINTS[dayIndex % TOPIC_HINTS.length];
 
     const { output } = await generateText({
       model: google(process.env.GEMINI_MODEL ?? "gemini-flash-latest"),
